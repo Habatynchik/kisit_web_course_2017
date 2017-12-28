@@ -52,7 +52,6 @@ var basket = (function () {
     }
 })();
 
-
 console.log(basket.addProduct(1));
 console.log(basket.addProduct(0));
 console.log(basket.addProduct(1));
