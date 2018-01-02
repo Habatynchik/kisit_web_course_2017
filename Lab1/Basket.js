@@ -13,6 +13,15 @@ class ProductLineItem {
     constructor(product) {
         this.product = product;
         this.quantity = 1;
+        this.inventory -= 1;
+    }
+
+    set inventory(inventory){
+        this.product.inventory = inventory;
+    }
+
+    get inventory(){
+        return this.product.inventory;
     }
 
     get price() {
@@ -22,11 +31,17 @@ class ProductLineItem {
     get totalPrice() {
         return this.product.price * this.quantity;
     }
+
+    set updateInventory(quantity){
+        this.inventory += this.quantity;
+        this.inventory -= quantity;
+        this.quantity = quantity;
+    }
 }
 
 
 var basket = (function () {
-    let myBasket = [];
+    let myBasket = new Array();
     return {
 
         addProduct: function (productID) {
@@ -35,11 +50,13 @@ var basket = (function () {
         },
 
         removeProduct: function (productID) {
+            myBasket[productID].updateInventory = 0;
             return myBasket.splice(productID, 1);
         },
 
         updateProductQuantity: function (productID, quantity) {
-            myBasket[productID].quantity = quantity;
+            let basket = myBasket[productID];
+            basket.updateInventory = quantity;
         },
 
         getTotalPrice: function () {
@@ -48,8 +65,11 @@ var basket = (function () {
                 totalPrice += cur.totalPrice;
             });
             return totalPrice;
+        },
+
+        getBasket: function () {
+
+            return myBasket;
         }
     }
 })();
-
-
