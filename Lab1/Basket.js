@@ -9,19 +9,30 @@ var products = [{
 }];
 
 class ProductLineItem {
-
     constructor(product) {
         this.product = product;
         this.quantity = 1;
         this.inventory -= 1;
     }
 
-    set inventory(inventory){
+    get name() {
+        return this.product.name;
+    }
+
+    set inventory(inventory) {
         this.product.inventory = inventory;
     }
 
-    get inventory(){
+    get inventory() {
         return this.product.inventory;
+    }
+
+    set quantity(value) {
+        this._quantity = value;
+    }
+
+    get quantity() {
+        return this._quantity;
     }
 
     get price() {
@@ -32,21 +43,22 @@ class ProductLineItem {
         return this.product.price * this.quantity;
     }
 
-    set updateInventory(quantity){
-        this.inventory += this.quantity;
-        this.inventory -= quantity;
-        this.quantity = quantity;
+    set updateInventory(value) {
+        this.inventory += this.quantity - value;
+        this.quantity = value;
     }
 }
-
 
 var basket = (function () {
     let myBasket = new Array();
     return {
-
         addProduct: function (productID) {
             let prod = new ProductLineItem(products[productID]);
-            return myBasket.push(prod);
+            let idx = myBasket.findIndex((element, index, array) => element.name === products[productID].name);
+
+            if (idx > -1) {
+                myBasket[idx].updateInventory = ++myBasket[idx].quantity;
+            } else myBasket.push(prod);
         },
 
         removeProduct: function (productID) {
