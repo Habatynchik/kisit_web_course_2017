@@ -9,53 +9,47 @@ var products = [{
 }];
 
 class ProductLineItem {
+
     constructor(product) {
         this.product = product;
-    }
-
-    get inventory() {
-        return this.product.inventory;
-    }
-
-    set inventory(quan) {
-        this.product.inventory = quan;
+        this.quantity = 1;
     }
 
     get price() {
         return this.product.price;
     }
+
+    get totalPrice() {
+        return this.product.price * this.quantity;
+    }
 }
 
+
 var basket = (function () {
+    let myBasket = [];
     return {
-        myBasket: new Array(),
+
         addProduct: function (productID) {
-            let prod = new ProductLineItem(Object.assign({}, products[productID]));
-            prod.inventory = 1;
-            return this.myBasket.push(prod);
+            let prod = new ProductLineItem(products[productID]);
+            return myBasket.push(prod);
         },
+
         removeProduct: function (productID) {
-            return this.myBasket.splice(productID, 1);
+            return myBasket.splice(productID, 1);
         },
 
         updateProductQuantity: function (productID, quantity) {
-            let o = this.myBasket[productID];
-            o.inventory = quantity;
+            myBasket[productID].quantity = quantity;
         },
+
         getTotalPrice: function () {
             let totalPrice = 0;
-            this.myBasket.forEach(function (cur, i, arr) {
-                totalPrice += cur.price * cur.inventory;
+            myBasket.forEach(function (cur, i, arr) {
+                totalPrice += cur.totalPrice;
             });
             return totalPrice;
         }
     }
 })();
 
-console.log(basket.addProduct(1));
-console.log(basket.addProduct(0));
-console.log(basket.addProduct(1));
 
-console.log(basket.updateProductQuantity(0, 2));
-console.log(basket.getTotalPrice());
-console.log(basket.myBasket);
