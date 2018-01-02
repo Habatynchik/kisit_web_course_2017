@@ -65,11 +65,6 @@ var basket = (function () {
                 totalPrice += cur.totalPrice;
             });
             return totalPrice;
-        },
-
-        getBasket: function () {
-
-            return myBasket;
         }
     }
 })();
